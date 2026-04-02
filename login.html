@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión — Cifrador RSA</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .logo { font-size: 28px; color: #a8d8a8; letter-spacing: 3px; margin-bottom: 4px; }
+  .subtitle { font-size: 10px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; }
+  .card {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 6px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .card h2 { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #a8d8a8; margin-bottom: 24px; }
+  label { display: block; font-size: 10px; color: #666; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+  input {
+    width: 100%; background: #0d1b2a; border: 1px solid #0f3460; border-radius: 4px;
+    color: #e0e0e0; font-family: 'Courier New', monospace; font-size: 13px;
+    padding: 10px 12px; outline: none; transition: border-color 0.2s;
+  }
+  input:focus { border-color: #a8d8a8; }
+  button {
+    margin-top: 24px; width: 100%; padding: 12px; background: transparent;
+    border: 1px solid #a8d8a8; border-radius: 4px; color: #a8d8a8;
+    font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+  }
+  button:hover { background: rgba(168,216,168,0.1); }
+  .flash { background: rgba(255,100,100,0.1); border: 1px solid #5a2020; border-radius: 4px; padding: 10px 14px; font-size: 12px; color: #f08080; margin-bottom: 16px; }
+  .link { text-align: center; margin-top: 20px; font-size: 11px; color: #444; }
+  .link a { color: #6a9fb5; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+  .link a:hover { border-color: #6a9fb5; }
+</style>
+</head>
+<body>
+  <div class="logo">&#9679; cifrador</div>
+  <p class="subtitle">sistema rsa — análisis de sistemas</p>
+
+  <div class="card">
+    <h2>iniciar sesión</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for msg in messages %}
+          {% if not msg.startswith('token:') %}
+            <div class="flash">{{ msg }}</div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="/login" method="POST">
+      <label>usuario</label>
+      <input type="text" name="username" autocomplete="off" required>
+      <label>contraseña</label>
+      <input type="password" name="password" required>
+      <button type="submit">&#9654; entrar</button>
+    </form>
+    <p class="link">¿no tienes cuenta? <a href="/registro">crear una</a></p>
+  </div>
+</body>
+</html>
