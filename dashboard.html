@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Cifrador RSA</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Courier New', monospace; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; padding: 0; }
+  header {
+    border-bottom: 1px solid #0f3460;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { font-size: 16px; color: #a8d8a8; letter-spacing: 2px; }
+  .user-info { font-size: 11px; color: #555; display: flex; align-items: center; gap: 16px; }
+  .user-info span { color: #a8d8a8; }
+  .user-info a { color: #555; text-decoration: none; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid transparent; transition: all 0.2s; }
+  .user-info a:hover { color: #f08080; border-color: #f08080; }
+  .container { max-width: 900px; margin: 0 auto; padding: 32px 20px; }
+
+  /* Token banner */
+  .token-banner {
+    background: #0d2a1a;
+    border: 1px solid #a8d8a8;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .token-banner .label { font-size: 10px; color: #a8d8a8; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+  .token-banner .token-val { font-size: 13px; color: #e0e0e0; flex: 1; word-break: break-all; }
+  .copy-btn {
+    background: transparent; border: 1px solid #a8d8a8; border-radius: 3px;
+    color: #a8d8a8; font-family: 'Courier New', monospace; font-size: 10px;
+    letter-spacing: 1px; padding: 5px 12px; cursor: pointer; transition: background 0.2s; white-space: nowrap;
+  }
+  .copy-btn:hover { background: rgba(168,216,168,0.15); }
+
+  /* Nueva entrada */
+  .new-card {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .section-title { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-bottom: 14px; }
+  .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .form-row input { flex: 1; min-width: 140px; }
+  input, textarea {
+    background: #0d1b2a; border: 1px solid #0f3460; border-radius: 4px;
+    color: #e0e0e0; font-family: 'Courier New', monospace; font-size: 12px;
+    padding: 9px 12px; outline: none; transition: border-color 0.2s; width: 100%;
+  }
+  input:focus, textarea:focus { border-color: #a8d8a8; }
+  textarea { resize: vertical; min-height: 70px; margin-top: 10px; }
+  .btn-primary {
+    background: transparent; border: 1px solid #a8d8a8; border-radius: 4px; color: #a8d8a8;
+    font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; padding: 9px 20px; cursor: pointer; transition: background 0.2s; white-space: nowrap;
+  }
+  .btn-primary:hover { background: rgba(168,216,168,0.1); }
+
+  /* Filtros */
+  .filters { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-link {
+    font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    color: #555; text-decoration: none; padding: 4px 12px;
+    border: 1px solid #1c2e50; border-radius: 3px; transition: all 0.2s;
+  }
+  .filter-link:hover, .filter-link.active { color: #a8d8a8; border-color: #a8d8a8; }
+
+  /* Tabla */
+  .table-wrap { background: #16213e; border: 1px solid #0f3460; border-radius: 6px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #444; padding: 10px 14px; font-weight: normal; border-bottom: 1px solid #0f3460; }
+  td { padding: 10px 14px; border-bottom: 0.5px solid #0f3460; color: #ccc; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  .token-cell { color: #6a9fb5; font-size: 10px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .badge { display: inline-block; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; border: 1px solid; }
+  .badge-activo   { color: #a8d8a8; border-color: #a8d8a8; background: rgba(168,216,168,0.07); }
+  .badge-leido    { color: #6a9fb5; border-color: #6a9fb5; background: rgba(106,159,181,0.07); }
+  .badge-eliminado{ color: #555; border-color: #333; background: transparent; }
+  .empty { text-align: center; padding: 40px; color: #333; font-size: 11px; letter-spacing: 1px; }
+  .actions { display: flex; gap: 8px; }
+  .btn-sm {
+    font-size: 9px; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px;
+    border-radius: 3px; cursor: pointer; font-family: 'Courier New', monospace;
+    text-decoration: none; display: inline-block; transition: background 0.2s;
+  }
+  .btn-audit { background: transparent; border: 1px solid #0f3460; color: #6a9fb5; }
+  .btn-audit:hover { background: rgba(106,159,181,0.1); }
+  .btn-delete { background: transparent; border: 1px solid #3a1515; color: #885050; }
+  .btn-delete:hover { background: rgba(136,80,80,0.15); }
+  .desc-link { background: transparent; border: 1px solid #2a3a1a; color: #7a9a6a; font-size: 9px; }
+  .desc-link:hover { background: rgba(122,154,106,0.1); }
+  .exp { font-size: 10px; color: #444; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">&#9679; cifrador rsa</div>
+  <div class="user-info">
+    usuario: <span>{{ session.username }}</span>
+    <a href="/logout">cerrar sesión</a>
+  </div>
+</header>
+
+<div class="container">
+
+  {# — Mostrar token recién generado — #}
+  {% with messages = get_flashed_messages() %}
+    {% for msg in messages %}
+      {% if msg.startswith('token:') %}
+        <div class="token-banner">
+          <span class="label">&#128274; token generado</span>
+          <span class="token-val" id="token-nuevo">{{ msg[6:] }}</span>
+          <button class="copy-btn" onclick="copiar()">copiar</button>
+        </div>
+      {% else %}
+        <div style="background:rgba(168,216,168,0.08);border:1px solid #2a4a2a;border-radius:4px;padding:10px 16px;margin-bottom:20px;font-size:12px;color:#a8d8a8;">
+          {{ msg }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endwith %}
+
+  {# — Formulario de cifrado — #}
+  <div class="new-card">
+    <p class="section-title">nuevo mensaje cifrado</p>
+    <form action="/cifrar" method="POST">
+      <div class="form-row">
+        <input type="text" name="etiqueta" placeholder="etiqueta (ej: para_juan)" required>
+        <button type="submit" class="btn-primary">&#9654; cifrar y generar token</button>
+      </div>
+      <textarea name="texto" placeholder="escribe aquí el mensaje secreto..." required></textarea>
+    </form>
+  </div>
+
+  {# — Historial — #}
+  <p class="section-title">historial de registros</p>
+  <div class="filters">
+    <a href="/dashboard" class="filter-link {% if filtro == 'todos' %}active{% endif %}">todos</a>
+    <a href="/dashboard?estado=ACTIVO" class="filter-link {% if filtro == 'ACTIVO' %}active{% endif %}">activos</a>
+    <a href="/dashboard?estado=LEIDO" class="filter-link {% if filtro == 'LEIDO' %}active{% endif %}">leídos</a>
+    <a href="/dashboard?estado=ELIMINADO" class="filter-link {% if filtro == 'ELIMINADO' %}active{% endif %}">eliminados</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>etiqueta</th>
+          <th>token</th>
+          <th>estado</th>
+          <th>expira</th>
+          <th>acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in registros %}
+        <tr>
+          <td style="color:#333">{{ r['id'] }}</td>
+          <td>{{ r['etiqueta'] }}</td>
+          <td class="token-cell" title="{{ r['token'] }}">{{ r['token'] }}</td>
+          <td>
+            {% if r['estado'] == 'ACTIVO' %}
+              <span class="badge badge-activo">activo</span>
+            {% elif r['estado'] == 'LEIDO' %}
+              <span class="badge badge-leido">leído</span>
+            {% else %}
+              <span class="badge badge-eliminado">eliminado</span>
+            {% endif %}
+          </td>
+          <td class="exp">{{ r['fecha_expiracion'][:10] }}</td>
+          <td>
+            <div class="actions">
+              <a href="/auditoria/{{ r['id'] }}" class="btn-sm btn-audit">auditoría</a>
+              <a href="/descifrar?token={{ r['token'] }}" class="btn-sm desc-link" target="_blank">ver</a>
+              {% if r['estado'] == 'ACTIVO' %}
+              <form action="/inactivar/{{ r['id'] }}" method="POST" style="display:inline" onsubmit="return confirm('¿Inactivar este registro?')">
+                <button type="submit" class="btn-sm btn-delete">inactivar</button>
+              </form>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+        {% if not registros %}
+        <tr><td colspan="6" class="empty">— sin registros —</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+function copiar() {
+  const val = document.getElementById('token-nuevo');
+  if (!val) return;
+  navigator.clipboard.writeText(val.textContent.trim()).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '¡copiado!';
+    setTimeout(() => btn.textContent = 'copiar', 2000);
+  });
+}
+</script>
+</body>
+</html>
