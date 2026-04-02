@@ -1,21 +1,46 @@
 # Tarea_3
 Aplicación de cifrado
 
-# Sistema de Cifrado Asimétrico con Tokens de Único Uso
+# 🔐 Sistema de Cifrado Asimétrico con Tokens de Uso Único
 
-Este proyecto es una aplicación web que permite cifrar mensajes de forma segura, generar un token de acceso único y mantener un historial de auditoría detallado.
+Aplicación web desarrollada en Flask que permite cifrar mensajes de forma segura utilizando criptografía RSA, generar tokens de acceso únicos y mantener un historial de auditoría.
+
+---
+
+## 📖 Descripción
+
+Este sistema permite a los usuarios:
+
+- Cifrar mensajes utilizando criptografía asimétrica (RSA 2048 bits)
+- Generar un token único para acceder al mensaje
+- Descifrar mensajes mediante token (uso único)
+- Mantener un registro de auditoría de todas las acciones
+
+El sistema está diseñado con un enfoque en seguridad, control de acceso y trazabilidad.
+
+---
+
+## 🏗️ Arquitectura
+
+- Backend: Flask (Python)
+- Base de datos: SQLite
+- Seguridad:
+  - RSA (cifrado/descifrado)
+  - Hash de contraseñas
+  - Tokens únicos
+- Arquitectura: Monolítica (MVC simplificado)
+
+---
 
 ## 🚀 Funcionalidades
-- **Cifrado RSA 2048 bits:** Seguridad de grado industrial.
-- **Tokens de Un Solo Uso:** El mensaje se destruye (lógicamente) tras ser leído.
-- **Borrado Lógico:** Opción de inactivar mensajes desde el historial.
-- **Auditoría Completa:** Registro de IP, fecha, hora y dispositivo.
 
-## 🛠️ Instalación
-1. Clonar el repositorio.
-2. Instalar dependencias: `pip install -r requirements.txt`
-3. Ejecutar: `python app.py`
+- 🔐 **Cifrado RSA (2048 bits):** Seguridad de nivel industrial  
+- 🎟️ **Tokens de un solo uso:** El mensaje solo puede ser leído una vez  
+- ⏳ **Expiración de tokens:** Los tokens tienen tiempo de validez  
+- 🗑️ **Borrado lógico:** Permite inactivar registros  
+- 📊 **Auditoría completa:** Registro de IP, fecha, hora y dispositivo  
+- 🔒 **Autenticación:** Login y registro de usuarios  
 
-## 👤 Credenciales de Prueba
-- **Usuario:** admin
-- **Contraseña:** 123
+---
+
+## 📂 Estructura del Proyecto
