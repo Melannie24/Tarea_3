@@ -44,3 +44,70 @@ El sistema está diseñado con un enfoque en seguridad, control de acceso y traz
 ---
 
 ## 📂 Estructura del Proyecto
+
+proyecto
+│
+├── app.py
+├── db.sqlite3
+├── /templates
+│ ├── login.html
+│ ├── dashboard.html
+│ ├── registro_usuario.html
+│ ├── descifrar.html
+│ ├── resultado.html
+│ ├── error_token.html
+│
+└── /keys
+
+## ⚙️ Instalación
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/tu-usuario/tu-repo.git
+cd tu-repo
+
+Credenciales de Prueba
+Usuario: admi
+Contraseña: 123
+
+🔐 Seguridad Implementada
+Criptografía RSA (clave pública/privada)
+Hash de contraseñas con Werkzeug
+Tokens únicos (UUID)
+Expiración de tokens
+Control de sesiones
+Auditoría de eventos
+
+🔄 Flujo del Sistema
+Cifrado
+Usuario inicia sesión
+Ingresa texto
+Sistema cifra el mensaje
+Genera token único
+Guarda en base de datos
+Descifrado
+Usuario ingresa token
+Sistema valida:
+existencia
+estado
+expiración
+Descifra mensaje
+Marca como leído
+Registra auditoría
+
+📊 Auditoría
+
+El sistema registra:
+
+Acción realizada (CIFRADO, LECTURA, FALLO, INACTIVACIÓN)
+Fecha y hora
+Dirección IP
+User-Agent (navegador/dispositivo)
+
+🧠 Tecnologías Utilizadas
+Python
+Flask
+SQLite
+Cryptography
+HTML / CSS
