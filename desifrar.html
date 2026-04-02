@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descifrar mensaje</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Courier New', monospace;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .logo { font-size: 20px; color: #a8d8a8; letter-spacing: 2px; margin-bottom: 4px; }
+  .subtitle { font-size: 10px; color: #444; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; }
+  .card {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 6px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 440px;
+  }
+  .card h2 { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #a8d8a8; margin-bottom: 8px; }
+  .card p.desc { font-size: 11px; color: #444; margin-bottom: 24px; line-height: 1.6; }
+  label { display: block; font-size: 10px; color: #666; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  input {
+    width: 100%; background: #0d1b2a; border: 1px solid #0f3460; border-radius: 4px;
+    color: #e0e0e0; font-family: 'Courier New', monospace; font-size: 12px;
+    padding: 10px 12px; outline: none; transition: border-color 0.2s;
+  }
+  input:focus { border-color: #a8d8a8; }
+  button {
+    margin-top: 20px; width: 100%; padding: 12px; background: transparent;
+    border: 1px solid #a8d8a8; border-radius: 4px; color: #a8d8a8;
+    font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+  }
+  button:hover { background: rgba(168,216,168,0.1); }
+  .warning { font-size: 10px; color: #444; margin-top: 20px; line-height: 1.6; text-align: center; }
+  .warning span { color: #7a6020; }
+</style>
+</head>
+<body>
+  <div class="logo">&#9679; cifrador rsa</div>
+  <p class="subtitle">descifrado de un solo uso</p>
+
+  <div class="card">
+    <h2>descifrar mensaje</h2>
+    <p class="desc">ingresa el token que recibiste. el mensaje solo puede leerse una vez.</p>
+    <form action="/descifrar" method="POST">
+      <label>token</label>
+      <input type="text" name="token" value="{{ token }}" autocomplete="off" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required>
+      <button type="submit">&#128275; descifrar mensaje</button>
+    </form>
+    <p class="warning">
+      <span>&#9651; advertencia:</span> una vez que descifres el mensaje, el token quedará inválido para siempre.
+    </p>
+  </div>
+  <p style="margin-top: 24px; font-size: 11px;">        ← agrega desde aquí
+        <a href="/dashboard" style="color: #6a9fb5; text-decoration: none; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid transparent;">
+          &#8592; volver al dashboard
+        </a>
+      </p>
+</body>
+</html>
